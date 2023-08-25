@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Canvas } from "@react-three/fiber";
+import { Suspense } from "react";
+import { Html } from "@react-three/drei";
+import Three from "./component/Three";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		// Canvas의 id는 스타일을 지정하기 위한 것
+		<Canvas id="three-canvas-container">
+			{/* Suspense : 렌더링이 준비되지 않은 컴포넌트가 있을 때 fallback을 보여주고 로딩이 완료되면 해당 컴포넌트를 보여줌 */}
+			<Suspense
+				fallback={
+					<Html>
+						<div>TEXT</div>
+					</Html>
+				}
+			>
+				<Three />
+			</Suspense>
+		</Canvas>
+	);
 }
 
 export default App;
