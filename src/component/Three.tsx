@@ -1,10 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { angleToRadians } from "../lib/angle";
-import {
-	OrbitControls,
-	OrbitControlsProps,
-	PerspectiveCamera,
-} from "@react-three/drei";
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
@@ -37,22 +33,32 @@ const Three = () => {
 			<OrbitControls
 				ref={orbitControlsRef}
 				minPolarAngle={angleToRadians(40)}
+				maxPolarAngle={angleToRadians(60)}
 			/>
 
 			{/* Ball */}
-			<mesh position={[0, 0.5, 0]}>
+			<mesh position={[0, 0.5, 0]} castShadow>
 				<sphereGeometry args={[0.5, 32, 32]} />
 				<meshStandardMaterial color="#ffffff" />
 			</mesh>
 
 			{/* Floor */}
-			<mesh rotation={[-angleToRadians(90), 0, 0]}>
+			<mesh rotation={[-angleToRadians(90), 0, 0]} receiveShadow>
 				<planeGeometry args={[7, 7]} />
-				<meshStandardMaterial color="#6ae466" />
+				<meshPhongMaterial color="#b7e2f3" />
 			</mesh>
 
 			{/* Light */}
-			<ambientLight args={["#ffffff", 1]} />
+			{/* 주변광 */}
+			<ambientLight args={["#ffffff", 0.25]} />
+			{/* 방향성 조명 */}
+			{/* <directionalLight args={["#ffffff", 1]} position={[-3, 1, 0]} /> */}
+			{/* 스포트라이트 */}
+			<spotLight
+				args={["#ffffff", 1.5, 7, angleToRadians(45), 0.4]}
+				position={[-3, 1, 0]}
+				castShadow
+			/>
 		</>
 	);
 };
