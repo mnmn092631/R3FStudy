@@ -1,6 +1,10 @@
 import React, { useRef } from "react";
 import { angleToRadians } from "../lib/angle";
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import {
+	Environment,
+	OrbitControls,
+	PerspectiveCamera,
+} from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
@@ -59,6 +63,14 @@ const Three = () => {
 				position={[-3, 1, 0]}
 				castShadow
 			/>
+
+			{/* Environment */}
+			<Environment background>
+				<mesh>
+					<sphereGeometry args={[50, 100, 100]} />
+					<meshBasicMaterial color="#cad34f" />
+				</mesh>
+			</Environment>
 		</>
 	);
 };
