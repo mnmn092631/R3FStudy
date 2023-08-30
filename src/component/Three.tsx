@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { angleToRadians } from "../lib/angle";
 import {
 	Environment,
@@ -8,10 +8,11 @@ import {
 import { useFrame } from "@react-three/fiber";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import * as THREE from "three";
+import gsap from "gsap";
 
 const Three = () => {
+	// Code to move the camera around
 	const orbitControlsRef = useRef<OrbitControlsImpl>(null);
-
 	useFrame((state) => {
 		if (orbitControlsRef.current) {
 			const { x, y } = state.mouse;
@@ -24,11 +25,63 @@ const Three = () => {
 		}
 	});
 
-	// useEffect(() => {
-	// 	if (orbitControlsRef.current) {
-	// 		console.log(orbitControlsRef.current);
-	// 	}
-	// }, [orbitControlsRef.current]);
+	// Animation
+	const ballRef = useRef<THREE.Mesh>(null);
+	useEffect(() => {
+		if (!ballRef.current) return;
+		console.log(ballRef.current);
+
+		// Timeline
+		const timeline = gsap.timeline({ paused: true });
+
+		// x-axis motion
+		timeline.to(ballRef.current.position, {
+			x: 1,
+			duration: 2,
+			ease: "power2.out",
+		});
+
+		// y-axis motion
+		timeline.to(
+			ballRef.current.position,
+			{
+				y: 0.5,
+				duration: 1.5,
+				ease: "bounce.out",
+			},
+			"<"
+		);
+
+		// const coefficient = 0.8;
+		// for (let i = 1; i <= 4; i++) {
+		// 	// Going up
+		// 	timeline.to(
+		// 		ballRef.current.position,
+		// 		{
+		// 			y: Math.pow(coefficient, i) * 1.5,
+		// 			duration: 0.2,
+		// 			ease: "power.out",
+		// 		},
+		// 		">"
+		// 	);
+
+		// 	// Coming back down
+		// 	timeline.to(
+		// 		ballRef.current.position,
+		// 		{
+		// 			y: 0.5,
+		// 			duration: 0.3,
+		// 			ease: "power.in",
+		// 		},
+		// 		">"
+		// 	);
+		// }
+
+		//Play
+		timeline.play();
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [ballRef.current]);
 
 	return (
 		<>
@@ -42,7 +95,7 @@ const Three = () => {
 			/>
 
 			{/* Ball */}
-			<mesh position={[0, 0.5, 0]} castShadow>
+			<mesh position={[-2, 1.5, 0]} castShadow ref={ballRef}>
 				<sphereGeometry args={[0.5, 32, 32]} />
 				{/* metalness 속성을 증가시키면 금속처럼 보임 */}
 				<meshStandardMaterial color="#ffffff" metalness={0.6} roughness={0.2} />
