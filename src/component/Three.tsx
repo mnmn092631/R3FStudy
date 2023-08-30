@@ -7,6 +7,7 @@ import {
 } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+import * as THREE from "three";
 
 const Three = () => {
 	const orbitControlsRef = useRef<OrbitControlsImpl>(null);
@@ -37,19 +38,20 @@ const Three = () => {
 			<OrbitControls
 				ref={orbitControlsRef}
 				minPolarAngle={angleToRadians(40)}
-				maxPolarAngle={angleToRadians(60)}
+				maxPolarAngle={angleToRadians(80)}
 			/>
 
 			{/* Ball */}
 			<mesh position={[0, 0.5, 0]} castShadow>
 				<sphereGeometry args={[0.5, 32, 32]} />
-				<meshStandardMaterial color="#ffffff" />
+				{/* metalness 속성을 증가시키면 금속처럼 보임 */}
+				<meshStandardMaterial color="#ffffff" metalness={0.6} roughness={0.2} />
 			</mesh>
 
 			{/* Floor */}
 			<mesh rotation={[-angleToRadians(90), 0, 0]} receiveShadow>
-				<planeGeometry args={[7, 7]} />
-				<meshPhongMaterial color="#b7e2f3" />
+				<planeGeometry args={[20, 20]} />
+				<meshStandardMaterial color="#1ea3d8" />
 			</mesh>
 
 			{/* Light */}
@@ -59,7 +61,7 @@ const Three = () => {
 			{/* <directionalLight args={["#ffffff", 1]} position={[-3, 1, 0]} /> */}
 			{/* 스포트라이트 */}
 			<spotLight
-				args={["#ffffff", 1.5, 7, angleToRadians(45), 0.4]}
+				args={["#ffffff", 10, 7, angleToRadians(45), 0.4]}
 				position={[-3, 1, 0]}
 				castShadow
 			/>
@@ -68,7 +70,8 @@ const Three = () => {
 			<Environment background>
 				<mesh>
 					<sphereGeometry args={[50, 100, 100]} />
-					<meshBasicMaterial color="#cad34f" />
+					{/* 구의 내부를 보려면 BackSide를 활성화해야 함 */}
+					<meshBasicMaterial color="#bcd681" side={THREE.BackSide} />
 				</mesh>
 			</Environment>
 		</>
